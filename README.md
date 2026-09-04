@@ -16,8 +16,9 @@ Database terdiri dari 7 tabel:
 - `Book_Copies` — jumlah copy tiap buku per cabang
 - `Book_Loans` — catatan peminjaman buku
 
-<!-- Tempel di sini foto ERD/PDM kamu dari dokumen tugas, contoh:-->
-![SQLNo5](overview/sql no 5.png)
+<p align="center"> <img src="overview/tabel publisher.png" width="100%"> </p> <p align="center"> <em>Contoh isi tabel pada database.</em> </p>
+
+<p align="center"> <img src="overview/sql no 5.png" width="100%"> </p> <p align="center"> <em>Tabel yang menjawab pertanyaan nomor 5.</em> </p>
 
 ## Isi Repo
 
