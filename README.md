@@ -1,67 +1,76 @@
 # Library Database — SQL & Relational Algebra
 
-Project ini adalah tugas mata kuliah **Teknologi Basis Data**, Departemen Matematika, Institut Teknologi Sepuluh Nopember. Berisi implementasi skema database perpustakaan (PDM) dalam SQL, 7 query analisis data, serta pemetaan operasi **aljabar relasional** ke syntax SQL yang sesuai.
+Library data — books, authors, branches, borrowers, and loan records — is spread across many interrelated tables. Without the right queries, simple operational questions like *"which borrowers currently have more than 5 books checked out?"* or *"how many copies of a book are available at each branch?"* become slow to answer and error-prone if done manually.
 
-**Disusun oleh:** Raissa Undita Estiningtyas
+This project designs a library database schema (7 interrelated tables, including a many-to-many relationship between Book and Author) and writes 7 SQL queries to answer those operational questions, using a range of techniques: aggregation (SUM, COUNT), multi-table JOINs, subqueries (NOT IN, NOT EXISTS), and UNION ALL to handle empty-result edge cases. Each query is also mapped back to its corresponding **relational algebra** operation (σ, π, ⋈, γ, etc.) as its theoretical foundation.
 
-## Struktur Database
+As a result, information that would otherwise require manually cross-referencing multiple tables can now be retrieved with a single query — an approach that can be directly adapted to a real library information system or similar relational data management use cases.
 
-Database terdiri dari 7 tabel:
-- `Publisher` — data penerbit
-- `Author` — data penulis
-- `Book` — data buku (terhubung ke Publisher)
-- `Book_Authors` — tabel penghubung Book ↔ Author (relasi many-to-many)
-- `Library_Branch` — data cabang perpustakaan
-- `Borrower` — data peminjam
-- `Book_Copies` — jumlah copy tiap buku per cabang
-- `Book_Loans` — catatan peminjaman buku
+This project was completed for the **Database Technology** course, Department of Mathematics, Institut Teknologi Sepuluh Nopember.
 
-## Overview Output SQL
-<p align="center"> <img src="overview/tabel publisher.png" width="60%"> </p> <p align="center"> <em>Contoh isi tabel pada database.</em> </p>
+**Author:** Raissa Undita Estiningtyas
 
-<p align="center"> <img src="overview/sql no 5.png" width="60%"> </p> <p align="center"> <em>Tabel yang menjawab pertanyaan nomor 5.</em> </p>
+## Database Structure
 
-## Isi Repo
+The database consists of 7 tables:
+- `Publisher` — publisher data
+- `Author` — author data
+- `Book` — book data (linked to Publisher)
+- `Book_Authors` — junction table linking Book ↔ Author (many-to-many relationship)
+- `Library_Branch` — library branch data
+- `Borrower` — borrower data
+- `Book_Copies` — number of copies of each book per branch
+- `Book_Loans` — book loan records
+
+## SQL Output Overview
+
+<p align="center"> <img src="overview/tabel publisher.png" width="60%"> </p>
+<p align="center"> <em>Sample content of a database table.</em> </p>
+
+<p align="center"> <img src="overview/sql no 5.png" width="60%"> </p>
+<p align="center"> <em>Result table answering query No. 5.</em> </p>
+
+## Repository Contents
 
 ```
 library-database-sql/
 ├── README.md
 ├── schema/
-│   └── create_tables.sql   -- struktur tabel + data contoh
+│   └── create_tables.sql   -- table structure + sample data
 ├── queries/
-│   └── queries.sql          -- 7 query analisis
+│   └── queries.sql          -- 7 analysis queries
 ```
 
-## Soal & Query
+## Questions & Queries
 
-| No | Soal | Query |
+| No | Question | Query |
 |----|------|-------|
-| 1 | Jumlah copy "The Lost Tribe" di cabang "Sharpstown" | [queries.sql](queries/queries.sql#L8) |
-| 2 | Jumlah copy "The Lost Tribe" per cabang | [queries.sql](queries/queries.sql#L18) |
-| 3 | Peminjam yang tidak sedang meminjam buku | [queries.sql](queries/queries.sql#L27) |
-| 4 | Buku jatuh tempo hari ini di cabang "Sharpstown" | [queries.sql](queries/queries.sql#L38) |
-| 5 | Total buku dipinjam per cabang | [queries.sql](queries/queries.sql#L55) |
-| 6 | Peminjam dengan >5 buku aktif dipinjam | [queries.sql](queries/queries.sql#L68) |
-| 7 | Buku karya Stephen King & stoknya di cabang "Central" | [queries.sql](queries/queries.sql#L97) |
+| 1 | Number of copies of "The Lost Tribe" at the "Sharpstown" branch | [queries.sql](queries/queries.sql#L8) |
+| 2 | Number of copies of "The Lost Tribe" per branch | [queries.sql](queries/queries.sql#L18) |
+| 3 | Borrowers who do not currently have any books checked out | [queries.sql](queries/queries.sql#L27) |
+| 4 | Books due today at the "Sharpstown" branch | [queries.sql](queries/queries.sql#L38) |
+| 5 | Total books loaned per branch | [queries.sql](queries/queries.sql#L55) |
+| 6 | Borrowers currently holding more than 5 books | [queries.sql](queries/queries.sql#L68) |
+| 7 | Books by Stephen King and their stock at the "Central" branch | [queries.sql](queries/queries.sql#L97) |
 
-## Pemetaan Aljabar Relasional ke SQL
+## Relational Algebra to SQL Mapping
 
-| Simbol | Nama Operasi | Padanan SQL |
+| Symbol | Operation | SQL Equivalent |
 |--------|--------------|-------------|
-| σ | Seleksi (Selection) | `WHERE` |
-| π | Proyeksi (Projection) | `SELECT` |
+| σ | Selection | `WHERE` |
+| π | Projection | `SELECT` |
 | ⋈ | Join (Inner Join) | `INNER JOIN ... ON ...` |
 | ⟗ | Full Outer Join | `FULL JOIN ... ON ...` |
 | ⟖ | Right Outer Join | `RIGHT JOIN ... ON ...` |
 | ⟕ | Left Outer Join | `LEFT JOIN ... ON ...` |
-| − | Difference | `EXCEPT` (atau `NOT IN`, `NOT EXISTS`) |
+| − | Difference | `EXCEPT` (or `NOT IN`, `NOT EXISTS`) |
 | ⋃ | Union | `UNION` |
 | ∩ | Intersection | `INTERSECT` |
-| γ | Agregasi/Grouping | `GROUP BY` + fungsi agregat (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`) |
+| γ | Aggregation/Grouping | `GROUP BY` + aggregate functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`) |
 | ρ | Rename | `AS` |
-| → | Assignment | `CREATE VIEW` atau `WITH ... AS ...` (CTE) |
+| → | Assignment | `CREATE VIEW` or `WITH ... AS ...` (CTE) |
 
-## Cara Menjalankan
+## How to Run
 
-1. Jalankan `schema/create_tables.sql` untuk membuat tabel dan mengisi data contoh.
-2. Jalankan query mana pun di `queries/queries.sql` sesuai nomor soal yang ingin dilihat.
+1. Run `schema/create_tables.sql` to create the tables and populate them with sample data.
+2. Run any query in `queries/queries.sql` corresponding to the question number you want to see.
