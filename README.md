@@ -30,7 +30,6 @@ library-database-sql/
 │   └── create_tables.sql   -- struktur tabel + data contoh
 ├── queries/
 │   └── queries.sql          -- 7 query analisis
-└── /              -- hasil eksekusi tiap query (opsional)
 ```
 
 ## Soal & Query
